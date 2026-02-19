@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Detalle del partido{% endblock %}
+
+{% block content %}
+  <h2>Detalle del partido #{{ partido_id + 1 }}</h2>
+  <div class="detail-card">
+    <p><strong>Fecha:</strong> {{ partido.fecha }}</p>
+    <p><strong>Rival:</strong> {{ partido.rival }}</p>
+    <p><strong>Goles:</strong> {{ partido.goles }}</p>
+    <p><strong>Asistencias:</strong> {{ partido.asistencias }}</p>
+    <p><strong>Tarjetas:</strong> {{ partido.tarjetas }}</p>
+  </div>
+  <a class="btn secondary" href="{{ url_for('inicio') }}">Volver</a>
+{% endblock %}

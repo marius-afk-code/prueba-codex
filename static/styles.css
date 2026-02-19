@@ -1,0 +1,130 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f4f6fb;
+  color: #1e2330;
+}
+
+.main-header {
+  background: #1f3c88;
+  color: white;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.main-header nav {
+  margin-top: 0.7rem;
+}
+
+.main-header a {
+  color: #d9e4ff;
+  margin: 0 0.6rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: #1f3c88;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn.secondary {
+  background: #4f5d75;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e8ebf2;
+  padding: 0.65rem;
+  text-align: left;
+}
+
+th {
+  background: #f0f3fa;
+}
+
+.card-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+input {
+  padding: 0.55rem;
+  border-radius: 6px;
+  border: 1px solid #cdd4e0;
+}
+
+.detail-card {
+  background: #f8faff;
+  border: 1px solid #e4ebfb;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.message {
+  padding: 0.65rem;
+  border-radius: 8px;
+}
+
+.message.success {
+  background: #def7e7;
+  color: #165b33;
+}
+
+.message.error {
+  background: #fde6e6;
+  color: #7a1e1e;
+}
+
+.empty {
+  color: #5d6678;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  th,
+  td {
+    font-size: 0.9rem;
+  }
+}

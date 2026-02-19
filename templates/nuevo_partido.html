@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Añadir partido{% endblock %}
+
+{% block content %}
+  <h2>Añadir nuevo partido</h2>
+  <form method="post" class="card-form">
+    <label for="fecha">Fecha (AAAA-MM-DD)</label>
+    <input type="text" id="fecha" name="fecha" placeholder="2026-01-31" required />
+
+    <label for="rival">Rival</label>
+    <input type="text" id="rival" name="rival" required />
+
+    <label for="goles">Goles</label>
+    <input type="number" id="goles" name="goles" min="0" required />
+
+    <label for="asistencias">Asistencias</label>
+    <input type="number" id="asistencias" name="asistencias" min="0" required />
+
+    <label for="tarjetas">Tarjetas</label>
+    <input type="number" id="tarjetas" name="tarjetas" min="0" required />
+
+    <button type="submit" class="btn">Guardar partido</button>
+  </form>
+{% endblock %}

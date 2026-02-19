@@ -3,15 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Registro de partidos{% endblock %}</title>
+    <title>{% block title %}Informe Inteligente{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
   </head>
   <body>
     <header class="main-header">
-      <h1>Registro de Estadísticas de Fútbol</h1>
+      <h1>Informe Inteligente para Entrenadores</h1>
       <nav>
-        <a href="{{ url_for('inicio') }}">Inicio</a>
-        <a href="{{ url_for('nuevo_partido') }}">Añadir partido</a>
+        {% if g.user %}
+          <a href="{{ url_for('inicio') }}">Partidos</a>
+          <a href="{{ url_for('nuevo_partido') }}">Nuevo partido</a>
+          <a href="{{ url_for('informes') }}">Informe</a>
+          <a href="{{ url_for('logout') }}">Salir ({{ g.user.username }})</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Login</a>
+          <a href="{{ url_for('register') }}">Registro</a>
+        {% endif %}
       </nav>
     </header>
 

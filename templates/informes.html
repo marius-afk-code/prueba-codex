@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Informes{% endblock %}
+
+{% block content %}
+  <h2>Informe automático</h2>
+
+  <form method="post" class="inline-form">
+    <label for="num_matches">Últimos partidos a analizar</label>
+    <select name="num_matches" id="num_matches">
+      <option value="3">3</option>
+      <option value="5" selected>5</option>
+      <option value="10">10</option>
+    </select>
+    <button type="submit" class="btn">Generar informe</button>
+  </form>
+
+  {% if ultimo %}
+    <section class="report-card">
+      <h3>Último informe ({{ ultimo.created_at.strftime('%Y-%m-%d %H:%M') }})</h3>
+      <p class="meta">Basado en {{ ultimo.num_matches }} partidos</p>
+      <pre>{{ ultimo.content }}</pre>
+    </section>
+  {% else %}
+    <p class="empty">Aún no hay informes guardados.</p>
+  {% endif %}
+
+  {% if historial %}
+    <h3>Historial</h3>
+    <ul class="history-list">
+      {% for item in historial %}
+        <li>
+          <strong>{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</strong>
+          — {{ item.num_matches }} partidos
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

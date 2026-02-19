@@ -1,51 +1,68 @@
-# Registro de fútbol (Web con Flask)
+# Informe Inteligente (MVP) para entrenadores
 
-Aplicación web para registrar estadísticas de partidos de fútbol con persistencia en `partidos.json`.
+Aplicación Flask para registrar partidos en pocos minutos y generar un informe automático con IA basado solo en datos reales capturados.
 
-## Características
-- Pantalla de inicio con tabla de partidos registrados.
-- Formulario para añadir partido (fecha, rival, goles, asistencias, tarjetas).
-- Vista de detalle por partido.
-- Exportación de datos a CSV.
-- Validaciones de fecha `AAAA-MM-DD` y números no negativos.
+## Funcionalidades principales
+- Registro/login/logout con usuarios almacenados en SQLite.
+- Cada usuario ve únicamente sus propios partidos e informes.
+- Alta rápida de partido con:
+  - fecha, rival, goles a favor/en contra, nota corta.
+  - eventos de gol mediante mini-campo clicable (minuto, tipo, coordenadas x/y).
+- Listado y detalle de partidos.
+- Generación de informe IA para últimos N partidos (3/5/10), guardado con timestamp en DB.
+- Persistencia completa en SQLite con SQLAlchemy.
 
-## Estructura del proyecto
-- `app.py` - Aplicación Flask (backend + rutas).
-- `templates/` - Plantillas HTML.
-- `static/` - Estilos CSS.
-- `partidos.json` - Persistencia de datos (se crea automáticamente si no existe).
-- `requirements.txt` - Dependencias.
+## Estructura
+- `app.py`: rutas Flask, validaciones y autenticación.
+- `models.py`: modelos SQLAlchemy (`User`, `Match`, `GoalEvent`, `Report`).
+- `services/analytics.py`: métricas y patrones simples para el análisis.
+- `services/ai_report.py`: prompt y llamada a OpenAI.
+- `templates/`: vistas HTML.
+- `static/`: CSS y JS del campo clicable.
+
+## Requisitos
+- Python 3.10+
 
 ## Instalación y ejecución (Windows)
 
-### 1) Abrir terminal en la carpeta del proyecto
-Puedes usar PowerShell o CMD.
-
-### 2) Crear y activar entorno virtual
+### 1) Crear y activar entorno virtual
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-Si usas CMD:
-```cmd
-py -m venv .venv
-.venv\Scripts\activate.bat
-```
-
-### 3) Instalar dependencias
+### 2) Instalar dependencias
 ```powershell
 pip install -r requirements.txt
 ```
 
-### 4) Ejecutar la aplicación
+### 3) Ejecutar app
 ```powershell
-python app.py
+py app.py
 ```
 
-### 5) Abrir en el navegador
-Visita: `http://127.0.0.1:5000/`
+Abrir en navegador:
+- `http://127.0.0.1:5000/`
 
-## Notas
-- Si `partidos.json` no existe, la app lo crea automáticamente con una lista vacía.
-- El botón **Exportar CSV** descarga un archivo llamado `partidos.csv`.
+## Configurar OPENAI_API_KEY
+Si no configuras la variable, la app mostrará: `Falta configurar OPENAI_API_KEY` al generar informe.
+
+### Windows (setx)
+```powershell
+setx OPENAI_API_KEY "sk-tu-api-key-aqui"
+```
+Cierra y vuelve a abrir la terminal para que se aplique.
+
+## Inicializar base de datos SQLite
+La app crea automáticamente la base y tablas al iniciar:
+- archivo SQLite: `instance/informes.db`
+- creación automática mediante `db.create_all()` en `app.py`.
+
+## Validaciones aplicadas
+- Fecha válida en formato `AAAA-MM-DD`.
+- Goles: enteros no negativos.
+- Eventos de gol:
+  - minuto entre 0 y 120.
+  - `for_or_against` en `{for, against}`.
+  - `play_type` en `Centro`, `ABP`, `Transición`, `Combinación`, `Individual`, `Otro`.
+  - coordenadas `x,y` entre 0 y 100.

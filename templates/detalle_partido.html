@@ -1,14 +1,41 @@
 {% extends "base.html" %}
-{% block title %}Detalle del partido{% endblock %}
+{% block title %}Detalle partido{% endblock %}
 
 {% block content %}
-  <h2>Detalle del partido #{{ partido_id + 1 }}</h2>
+  <h2>Detalle del partido</h2>
   <div class="detail-card">
-    <p><strong>Fecha:</strong> {{ partido.fecha }}</p>
-    <p><strong>Rival:</strong> {{ partido.rival }}</p>
-    <p><strong>Goles:</strong> {{ partido.goles }}</p>
-    <p><strong>Asistencias:</strong> {{ partido.asistencias }}</p>
-    <p><strong>Tarjetas:</strong> {{ partido.tarjetas }}</p>
+    <p><strong>Fecha:</strong> {{ partido.date.strftime('%Y-%m-%d') }}</p>
+    <p><strong>Rival:</strong> {{ partido.opponent }}</p>
+    <p><strong>Goles a favor:</strong> {{ partido.goals_for }}</p>
+    <p><strong>Goles en contra:</strong> {{ partido.goals_against }}</p>
+    <p><strong>Notas:</strong> {{ partido.notes_short or '-' }}</p>
   </div>
-  <a class="btn secondary" href="{{ url_for('inicio') }}">Volver</a>
+
+  <h3>Eventos de gol</h3>
+  {% if partido.goal_events %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Minuto</th>
+            <th>Jugada</th>
+            <th>Zona (x,y)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in partido.goal_events %}
+            <tr>
+              <td>{{ 'A favor' if event.for_or_against == 'for' else 'En contra' }}</td>
+              <td>{{ event.minute }}</td>
+              <td>{{ event.play_type }}</td>
+              <td>({{ '%.1f'|format(event.x) }}, {{ '%.1f'|format(event.y) }})</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="empty">No hay eventos de gol cargados.</p>
+  {% endif %}
 {% endblock %}

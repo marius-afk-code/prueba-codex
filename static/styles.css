@@ -1,19 +1,32 @@
 :root {
   color-scheme: light;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --bg: #f2f5fb;
+  --surface: #ffffff;
+  --surface-alt: #f8fbff;
+  --text: #182033;
+  --muted: #5f6b85;
+  --primary: #1f4ec9;
+  --primary-dark: #183b97;
+  --danger: #a53232;
+  --border: #dce4f4;
+  --shadow: 0 12px 36px rgba(18, 36, 83, 0.12);
+  font-family: Inter, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  background: #f4f6fb;
-  color: #1e2330;
+  background: radial-gradient(circle at 10% 0%, #f8fbff, var(--bg) 55%);
+  color: var(--text);
 }
 
 .main-header {
-  background: #1f3c88;
+  background: linear-gradient(135deg, #1a3a8e, #2356d8);
   color: white;
-  padding: 1.2rem;
+  padding: 1.4rem;
   text-align: center;
+  box-shadow: 0 8px 30px rgba(25, 47, 112, 0.25);
 }
 
 .main-header nav {
@@ -28,6 +41,14 @@ body {
   color: #d9e4ff;
   text-decoration: none;
   font-weight: 600;
+  border: 1px solid transparent;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+}
+
+.main-header a:hover {
+  border-color: #ffffff77;
+  background: #ffffff20;
 }
 
 .container {
@@ -49,14 +70,16 @@ body {
 }
 
 .btn {
-  background: #1f3c88;
+  background: var(--primary);
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 0.65rem 1rem;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
+  font-weight: 600;
+  transition: transform 0.12s ease, background 0.2s ease;
 }
 
 .btn.secondary { background: #4f5d75; }
@@ -64,18 +87,22 @@ body {
 
 .table-wrapper { overflow-x: auto; }
 
-th,
-td {
-  border-bottom: 1px solid #e8ebf2;
-  padding: 0.65rem;
-  text-align: left;
+.pitch-card {
+  background: #eef4ff;
+  border: 1px solid #d4e0fa;
+  border-radius: 12px;
+  padding: 0.9rem;
 }
 
 th { background: #f0f3fa; }
 
-.card-form {
-  display: grid;
-  gap: 0.6rem;
+.pitch-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 2px solid #236c34;
+  box-shadow: inset 0 0 0 1px #ffffff40;
 }
 
 .row-2,

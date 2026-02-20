@@ -20,9 +20,7 @@
             <th>Tipo</th>
             <th>Minuto</th>
             <th>Jugada</th>
-            <th>Subtipo ABP</th>
-            <th>Inicio (x,y)</th>
-            <th>Fin (x,y)</th>
+            <th>Zona (x,y)</th>
           </tr>
         </thead>
         <tbody>
@@ -31,15 +29,7 @@
               <td>{{ 'A favor' if event.for_or_against == 'for' else 'En contra' }}</td>
               <td>{{ event.minute }}</td>
               <td>{{ event.play_type }}</td>
-              <td>{{ event.abp_subtype or '-' }}</td>
-              <td>({{ '%.1f'|format(event.x_start) }}, {{ '%.1f'|format(event.y_start) }})</td>
-              <td>
-                {% if event.x_end is not none and event.y_end is not none %}
-                  ({{ '%.1f'|format(event.x_end) }}, {{ '%.1f'|format(event.y_end) }})
-                {% else %}
-                  -
-                {% endif %}
-              </td>
+              <td>({{ '%.1f'|format(event.x) }}, {{ '%.1f'|format(event.y) }})</td>
             </tr>
           {% endfor %}
         </tbody>

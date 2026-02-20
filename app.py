@@ -5,7 +5,6 @@ from datetime import datetime
 from functools import wraps
 
 from flask import Flask, flash, g, redirect, render_template, request, session, url_for
-from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from models import GoalEvent, Match, Report, User, db
@@ -13,18 +12,7 @@ from services.ai_report import generate_report_from_metrics
 from services.analytics import build_analytics
 
 DATE_FORMAT = "%Y-%m-%d"
-PLAY_TYPES = [
-    "ABP",
-    "Centro lateral",
-    "Transición",
-    "Pase filtrado",
-    "Disparo exterior",
-    "Error (pérdida/portero)",
-    "Combinación",
-    "Individual",
-    "Otro",
-]
-ABP_SUBTYPES = ["Córner", "Falta frontal", "Falta lateral", "Penalti", "Saque de banda", "Otro ABP"]
+PLAY_TYPES = ["Centro", "ABP", "Transición", "Combinación", "Individual", "Otro"]
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev-secret-key"
@@ -36,37 +24,6 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
-
-    cols = {
-        row[1]
-        for row in db.session.execute(text("PRAGMA table_info(goal_event)")).fetchall()
-    }
-    migrations = {
-        "abp_subtype": "ALTER TABLE goal_event ADD COLUMN abp_subtype VARCHAR(40)",
-        "x_start": "ALTER TABLE goal_event ADD COLUMN x_start FLOAT",
-        "y_start": "ALTER TABLE goal_event ADD COLUMN y_start FLOAT",
-        "x_end": "ALTER TABLE goal_event ADD COLUMN x_end FLOAT",
-        "y_end": "ALTER TABLE goal_event ADD COLUMN y_end FLOAT",
-    }
-    for col, query in migrations.items():
-        if col not in cols:
-            db.session.execute(text(query))
-
-    # Compatibilidad con esquema anterior que tenía x/y.
-    cols = {
-        row[1]
-        for row in db.session.execute(text("PRAGMA table_info(goal_event)")).fetchall()
-    }
-    if {"x", "y", "x_start", "y_start"}.issubset(cols):
-        db.session.execute(
-            text(
-                "UPDATE goal_event "
-                "SET x_start = COALESCE(x_start, x), y_start = COALESCE(y_start, y) "
-                "WHERE x_start IS NULL OR y_start IS NULL"
-            )
-        )
-
-    db.session.commit()
 
 
 def login_required(view):
@@ -87,10 +44,6 @@ def load_logged_user() -> None:
         g.user = None
     else:
         g.user = db.session.get(User, user_id)
-
-
-def _in_range(value: float) -> bool:
-    return 0 <= value <= 100
 
 
 def parse_match_form(form) -> tuple[dict, list[str]]:
@@ -117,9 +70,7 @@ def parse_match_form(form) -> tuple[dict, list[str]]:
 
     try:
         events = json.loads(raw_events)
-        if not isinstance(events, list):
-            raise ValueError
-    except (json.JSONDecodeError, ValueError):
+    except json.JSONDecodeError:
         events = []
         errors.append("Eventos de gol inválidos.")
 
@@ -127,14 +78,13 @@ def parse_match_form(form) -> tuple[dict, list[str]]:
     for idx, event in enumerate(events, start=1):
         side = event.get("for_or_against")
         play_type = event.get("play_type")
-        abp_subtype = event.get("abp_subtype")
 
         try:
             minute = int(event.get("minute"))
-            x_start = float(event.get("x_start"))
-            y_start = float(event.get("y_start"))
+            x = float(event.get("x"))
+            y = float(event.get("y"))
         except (TypeError, ValueError):
-            errors.append(f"Evento {idx}: minuto o coordenadas inicio inválidas.")
+            errors.append(f"Evento {idx}: minuto o coordenadas inválidas.")
             continue
 
         if side not in {"for", "against"}:
@@ -143,41 +93,16 @@ def parse_match_form(form) -> tuple[dict, list[str]]:
             errors.append(f"Evento {idx}: tipo de jugada inválido.")
         if minute < 0 or minute > 120:
             errors.append(f"Evento {idx}: minuto fuera de rango (0-120).")
-        if not _in_range(x_start) or not _in_range(y_start):
-            errors.append(f"Evento {idx}: coordenadas inicio fuera de rango (0-100).")
-
-        x_end = None
-        y_end = None
-
-        if play_type == "ABP":
-            if abp_subtype not in ABP_SUBTYPES:
-                errors.append(f"Evento {idx}: subtipo ABP obligatorio e inválido.")
-        else:
-            abp_subtype = None
-
-        if play_type == "Transición":
-            try:
-                x_end = float(event.get("x_end"))
-                y_end = float(event.get("y_end"))
-            except (TypeError, ValueError):
-                errors.append(f"Evento {idx}: transición requiere clic de inicio y fin.")
-
-            if x_end is not None and y_end is not None and (not _in_range(x_end) or not _in_range(y_end)):
-                errors.append(f"Evento {idx}: coordenadas fin fuera de rango (0-100).")
-        else:
-            x_end = None
-            y_end = None
+        if x < 0 or x > 100 or y < 0 or y > 100:
+            errors.append(f"Evento {idx}: coordenadas fuera de rango (0-100).")
 
         valid_events.append(
             {
                 "for_or_against": side,
                 "minute": minute,
                 "play_type": play_type,
-                "abp_subtype": abp_subtype,
-                "x_start": x_start,
-                "y_start": y_start,
-                "x_end": x_end,
-                "y_end": y_end,
+                "x": x,
+                "y": y,
             }
         )
 
@@ -258,11 +183,7 @@ def nuevo_partido():
         if errors:
             for err in errors:
                 flash(err, "error")
-            return render_template(
-                "nuevo_partido.html",
-                play_types=PLAY_TYPES,
-                abp_subtypes=ABP_SUBTYPES,
-            )
+            return render_template("nuevo_partido.html", play_types=PLAY_TYPES)
 
         match = Match(
             user_id=g.user.id,
@@ -281,7 +202,7 @@ def nuevo_partido():
         flash("Partido guardado correctamente.", "success")
         return redirect(url_for("inicio"))
 
-    return render_template("nuevo_partido.html", play_types=PLAY_TYPES, abp_subtypes=ABP_SUBTYPES)
+    return render_template("nuevo_partido.html", play_types=PLAY_TYPES)
 
 
 @app.route("/partidos/<int:match_id>")

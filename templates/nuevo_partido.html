@@ -22,12 +22,12 @@
     </div>
 
     <label for="notes_short">Notas cortas (opcional)</label>
-    <textarea id="notes_short" name="notes_short" rows="2" placeholder="Ej: dominio territorial pero poca claridad final"></textarea>
+    <textarea id="notes_short" name="notes_short" rows="2" placeholder="Ej: buen inicio, caída física en 2T"></textarea>
 
-    <h3>Registrar evento en campo realista</h3>
+    <h3>Registrar goles en mini-campo</h3>
     <div class="event-controls row-3">
       <div>
-        <label for="for_or_against">Tipo de gol</label>
+        <label for="for_or_against">Tipo</label>
         <select id="for_or_against">
           <option value="for">Gol a favor</option>
           <option value="against">Gol en contra</option>
@@ -47,26 +47,11 @@
       </div>
     </div>
 
-    <div id="abp_subtype_wrap" class="abp-wrap hidden">
-      <label for="abp_subtype">Subtipo ABP</label>
-      <select id="abp_subtype">
-        <option value="">Seleccionar subtipo ABP</option>
-        {% for subtype in abp_subtypes %}
-          <option value="{{ subtype }}">{{ subtype }}</option>
-        {% endfor %}
-      </select>
-    </div>
-
-    <div class="pitch-card">
-      <div id="pitch" class="pitch" aria-label="Campo de fútbol clicable">
-        <img src="{{ url_for('static', filename='img/pitch.svg') }}" alt="Campo de fútbol" class="pitch-img" />
-        <div id="markers-layer" class="markers-layer"></div>
-      </div>
-      <p id="pitch-help" class="hint">Haz 1 clic para fijar la ubicación del evento.</p>
-      <button type="button" class="btn" id="add-event-btn" disabled>Añadir evento</button>
-    </div>
+    <div id="pitch" class="pitch" aria-label="Campo de fútbol clicable"></div>
+    <p class="hint">Haz clic sobre el campo para añadir el evento con los datos seleccionados.</p>
 
     <ul id="events-list" class="events-list"></ul>
+
     <input type="hidden" name="goal_events" id="goal_events" value="[]" />
 
     <button type="submit" class="btn">Guardar partido</button>

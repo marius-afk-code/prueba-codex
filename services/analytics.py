@@ -52,20 +52,16 @@ def build_analytics(matches: list[Match]) -> AnalyticsResult:
     for match in matches:
         for event in match.goal_events:
             band = _minute_band(event.minute)
-            zone = _zone(event.x_start, event.y_start)
-
-            play_type_label = event.play_type
-            if event.play_type == "ABP" and event.abp_subtype:
-                play_type_label = f"ABP - {event.abp_subtype}"
+            zone = _zone(event.x, event.y)
 
             if event.for_or_against == "for":
                 total_events_for += 1
-                play_type_for[play_type_label] += 1
+                play_type_for[event.play_type] += 1
                 minute_for[band] += 1
                 zone_for[zone] += 1
             else:
                 total_events_against += 1
-                play_type_against[play_type_label] += 1
+                play_type_against[event.play_type] += 1
                 minute_against[band] += 1
                 zone_against[zone] += 1
 

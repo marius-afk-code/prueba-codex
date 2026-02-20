@@ -40,14 +40,11 @@ class Match(db.Model):
 class GoalEvent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey("match.id"), nullable=False, index=True)
-    for_or_against = db.Column(db.String(10), nullable=False)
+    for_or_against = db.Column(db.String(10), nullable=False)  # for / against
     minute = db.Column(db.Integer, nullable=False)
-    play_type = db.Column(db.String(40), nullable=False)
-    abp_subtype = db.Column(db.String(40), nullable=True)
-    x_start = db.Column(db.Float, nullable=False)
-    y_start = db.Column(db.Float, nullable=False)
-    x_end = db.Column(db.Float, nullable=True)
-    y_end = db.Column(db.Float, nullable=True)
+    play_type = db.Column(db.String(30), nullable=False)
+    x = db.Column(db.Float, nullable=False)
+    y = db.Column(db.Float, nullable=False)
 
 
 class Report(db.Model):

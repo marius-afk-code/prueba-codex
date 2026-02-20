@@ -64,17 +64,5 @@ La app crea automáticamente la base y tablas al iniciar:
 - Eventos de gol:
   - minuto entre 0 y 120.
   - `for_or_against` en `{for, against}`.
-  - `play_type` en los tipos soportados (incluyendo ABP con subtipo).
-  - coordenadas `x_start,y_start` entre 0 y 100; en `Transición` también `x_end,y_end` entre 0 y 100.
-
-
-## Tipos de jugada soportados
-- ABP (con subtipo obligatorio: Córner, Falta frontal, Falta lateral, Penalti, Saque de banda, Otro ABP).
-- Centro lateral
-- Transición (requiere dos clics: inicio y fin).
-- Pase filtrado
-- Disparo exterior
-- Error (pérdida/portero)
-- Combinación
-- Individual
-- Otro
+  - `play_type` en `Centro`, `ABP`, `Transición`, `Combinación`, `Individual`, `Otro`.
+  - coordenadas `x,y` entre 0 y 100.

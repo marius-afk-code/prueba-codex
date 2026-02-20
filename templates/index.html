@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Inicio | Registro de partidos{% endblock %}
+{% block title %}Partidos{% endblock %}
 
 {% block content %}
   <section class="toolbar">
     <a class="btn" href="{{ url_for('nuevo_partido') }}">+ Nuevo partido</a>
-    <a class="btn secondary" href="{{ url_for('exportar_csv') }}">Exportar CSV</a>
+    <a class="btn secondary" href="{{ url_for('informes') }}">Ir a informes</a>
   </section>
 
   {% if partidos %}
@@ -12,31 +12,29 @@
       <table>
         <thead>
           <tr>
-            <th>#</th>
             <th>Fecha</th>
             <th>Rival</th>
-            <th>Goles</th>
-            <th>Asistencias</th>
-            <th>Tarjetas</th>
+            <th>GF</th>
+            <th>GC</th>
+            <th>Notas</th>
             <th>Detalle</th>
           </tr>
         </thead>
         <tbody>
           {% for partido in partidos %}
             <tr>
-              <td>{{ loop.index }}</td>
-              <td>{{ partido.fecha }}</td>
-              <td>{{ partido.rival }}</td>
-              <td>{{ partido.goles }}</td>
-              <td>{{ partido.asistencias }}</td>
-              <td>{{ partido.tarjetas }}</td>
-              <td><a href="{{ url_for('detalle_partido', partido_id=loop.index0) }}">Ver</a></td>
+              <td>{{ partido.date.strftime('%Y-%m-%d') }}</td>
+              <td>{{ partido.opponent }}</td>
+              <td>{{ partido.goals_for }}</td>
+              <td>{{ partido.goals_against }}</td>
+              <td>{{ partido.notes_short or '-' }}</td>
+              <td><a href="{{ url_for('detalle_partido', match_id=partido.id) }}">Ver</a></td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   {% else %}
-    <p class="empty">Aún no has registrado partidos.</p>
+    <p class="empty">Todavía no registraste partidos.</p>
   {% endif %}
 {% endblock %}

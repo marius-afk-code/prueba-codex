@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Campo de fútbol">
+  <defs>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#49a857"/>
+      <stop offset="1" stop-color="#388f45"/>
+    </linearGradient>
+    <pattern id="stripes" width="120" height="760" patternUnits="userSpaceOnUse">
+      <rect width="60" height="760" fill="#4ead5b"/>
+      <rect x="60" width="60" height="760" fill="#419f50"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="760" fill="url(#grass)"/>
+  <rect x="0" y="0" width="1200" height="760" fill="url(#stripes)" opacity="0.55"/>
+
+  <rect x="30" y="30" width="1140" height="700" fill="none" stroke="#ffffff" stroke-width="6"/>
+  <line x1="600" y1="30" x2="600" y2="730" stroke="#ffffff" stroke-width="6"/>
+  <circle cx="600" cy="380" r="86" fill="none" stroke="#ffffff" stroke-width="6"/>
+  <circle cx="600" cy="380" r="4.8" fill="#ffffff"/>
+
+  <rect x="30" y="205" width="170" height="350" fill="none" stroke="#ffffff" stroke-width="6"/>
+  <rect x="30" y="285" width="58" height="190" fill="none" stroke="#ffffff" stroke-width="6"/>
+  <circle cx="142" cy="380" r="4.8" fill="#ffffff"/>
+  <path d="M200 310 A90 90 0 0 0 200 450" fill="none" stroke="#ffffff" stroke-width="6"/>
+
+  <rect x="1000" y="205" width="170" height="350" fill="none" stroke="#ffffff" stroke-width="6"/>
+  <rect x="1112" y="285" width="58" height="190" fill="none" stroke="#ffffff" stroke-width="6"/>
+  <circle cx="1058" cy="380" r="4.8" fill="#ffffff"/>
+  <path d="M1000 310 A90 90 0 0 1 1000 450" fill="none" stroke="#ffffff" stroke-width="6"/>
+
+  <path d="M30 30 A24 24 0 0 1 54 54" fill="none" stroke="#ffffff" stroke-width="5"/>
+  <path d="M1170 30 A24 24 0 0 0 1146 54" fill="none" stroke="#ffffff" stroke-width="5"/>
+  <path d="M30 730 A24 24 0 0 0 54 706" fill="none" stroke="#ffffff" stroke-width="5"/>
+  <path d="M1170 730 A24 24 0 0 1 1146 706" fill="none" stroke="#ffffff" stroke-width="5"/>
+</svg>

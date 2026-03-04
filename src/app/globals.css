@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+body { @apply bg-slate-950 text-slate-100; }
+input, textarea, select { @apply bg-slate-900 border-slate-700 border rounded px-3 py-2; }
+button { @apply rounded px-3 py-2; }
+.card { @apply bg-slate-900/60 border border-slate-800 rounded-xl p-4; }
